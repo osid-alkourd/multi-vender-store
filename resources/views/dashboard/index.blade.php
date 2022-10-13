@@ -71,10 +71,11 @@
     @stop
 
 
-
+{{--
    @push('style')
        <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
    @endpush
+   --}}
 
 {{-- append to style not override
     @push('style')
