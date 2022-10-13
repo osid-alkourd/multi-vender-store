@@ -22,13 +22,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 */
 
-Route::get('/dashboard' , [DashboardController::class , 'index'])
-     ->middleware(['auth'])
-     ->name('dashboard');
 
-
-Route::get('/dashboard' , [DashboardController::class , 'index'])
-    ->middleware(['auth'])
-    ->name('dashboard');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/dashboard.php';
