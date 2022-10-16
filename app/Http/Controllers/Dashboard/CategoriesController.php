@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
@@ -39,7 +40,15 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //$request->post() just from body (post)
+        // $request->query() just from url (get)
+        // $request->get() from post or get
+
+        //PRG  POST REDIRECT GIT
+        $request['slug'] = Str::slug($request->post('name'));
+        $category = Category::create($request->all());
+        return redirect()->route('categories.index')
+            ->with('success' , 'Add successfully');
     }
 
     /**

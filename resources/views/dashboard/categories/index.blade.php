@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('header' , 'osid')
+@section('header' , 'categories')
 
 @section('breadcrum')
     @parent
@@ -8,7 +8,17 @@
 @stop
 
 @section('content')
+    <div class="mb-5">
+        <a href="{{route('categories.create')}}" class="btn btn-sm btn-outline-primary">Create</a>
+        <!-- /.btn btn-sm btn-outline-primary -->
+    </div>
+    <!-- /.mb-5 -->
 
+    @if(session()->has('success'))
+        <div class="alert alert-success">
+            {{session('success')}}
+        </div>
+    @endif
     <table class="table">
         <thead>
         <tr>
@@ -29,15 +39,17 @@
                 <td>{{$category->parent}}</td>
                 <td>{{$category->created_at}}</td>
                 <td>
-                    <a href="{{route('categories.edit' , [$categories->id])}}" class="btn btn-sm btn-outline-success"></a>
+                    <a href="{{route('categories.edit' , [$category->id])}}" class="btn btn-sm btn-outline-success">Update</a>
                     <!-- /.btn btn-sm btn-outline-success -->
                 </td>
-                <form action="{{route('categories.destroy' , [$categories->id])}}">
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="btn btn-sm btn-outline-danger">delete</button>
-                    <!-- /.btn btn-sm btn-outline-danger -->
-                </form>
+                <td>
+                    <form action="{{route('categories.destroy' , [$category->id])}}">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">delete</button>
+                        <!-- /.btn btn-sm btn-outline-danger -->
+                    </form>
+                </td>
             </tr>
         @empty
             <tr>

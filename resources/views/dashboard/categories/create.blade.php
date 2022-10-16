@@ -21,7 +21,7 @@
             <select name="parent_id"  class="form-control">
                 <option value="">Select Category Parent</option>
                 @foreach($parents as $parent)
-                    <option value="{{$parent->id}}">$parent->name</option>
+                    <option value="{{$parent->id}}">{{$parent->name}}</option>
                 @endforeach
             </select>
         </div>
