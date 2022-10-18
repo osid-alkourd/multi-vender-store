@@ -4,8 +4,17 @@ use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\DashboardController;
 
 
-Route::get('/dashboard' , [DashboardController::class , 'index'])
-    ->middleware(['auth'])
-    ->name('dashboard');
+Route::group([
+     'middleware' => ['auth'] ,
+     'as' => 'dashboard.' ,
+    'prefix' => 'dashboard' ,
+    // 'namespace' => 'App\Http\Controller\Dashboard' ,
+] ,function(){
+    Route::get('/' , [DashboardController::class , 'index'])
+        ->middleware(['auth'])
+        ->name('dashboard');
 
-Route::resource('dashboard/categories' , CategoriesController::class);
+    Route::resource('/categories' , CategoriesController::class);
+    // name for route resources for index will be dashboard.cetegories.index
+});
+

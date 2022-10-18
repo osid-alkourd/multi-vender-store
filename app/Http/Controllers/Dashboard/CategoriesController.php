@@ -47,7 +47,7 @@ class CategoriesController extends Controller
         //PRG  POST REDIRECT GIT
         $request['slug'] = Str::slug($request->post('name'));
         $category = Category::create($request->all());
-        return redirect()->route('categories.index')
+        return redirect()->route('dashboard.categories.index')
             ->with('success' , 'Add successfully');
     }
 
@@ -70,7 +70,14 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        // select * from categories where id != $id and (parent_id is Null or parent_id != $id)
+        $parents = Category::where('id' , '<>' , $id)
+                       ->where(function ($query) use ($id){
+                       $query->whereNull('parent_id')
+                             ->orWhere('parent_id' , '<>' , $id);
+                   })->get(); // <> means !=
+        return view('dashboard.categories.edit' , compact('category' , 'parents'));
     }
 
     /**
@@ -82,7 +89,11 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+         $category->update($request->all());
+        return redirect()->route('dashboard.categories.index')
+            ->with('success' , 'updated successfully');
+
     }
 
     /**
@@ -93,6 +104,14 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        /*
+        $category = Category::findOrFail($id);
+        $category->delete();
+        */
+        // previous code can be replacement with the following
+        Category::destroy($id);
+        return redirect()->route('dashboard.categories.index')
+            ->with('success' , 'deleted successfully');
+
     }
 }
