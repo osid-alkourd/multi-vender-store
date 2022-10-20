@@ -33,13 +33,13 @@
         <tbody>
         @forelse($categories as $category)
             <tr>
-                <td></td>
+                <td><img src="{{asset('storage/'.$category->image)}}" alt="" height="40" ></td>
                 <td>{{$category->id}}</td>
                 <td>{{$category->name}}</td>
                 <td>{{$category->parent_id}}</td>
                 <td>{{$category->created_at}}</td>
                 <td>
-                    <a href="{{route('dashboard.categories.edit' , [$category->id])}}" class="btn btn-sm btn-outline-success">Update</a>
+                    <a href="{{route('dashboard.categories.edit' , [$category->id])}}" class="btn btn-sm btn-outline-success">edit</a>
                     <!-- /.btn btn-sm btn-outline-success -->
                 </td>
                 <td>

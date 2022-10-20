@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
@@ -41,13 +42,12 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //$request->post() just from body (post)
-        // $request->query() just from url (get)
-        // $request->get() from post or get
 
+        $data = $request->except('image');
+        $data['slug'] = Str::slug($request->post('name'));
+        $data['image'] = $this->uploadFile($request);
+        $category = Category::create($data);
         //PRG  POST REDIRECT GIT
-        $request['slug'] = Str::slug($request->post('name'));
-        $category = Category::create($request->all());
         return redirect()->route('dashboard.categories.index')
             ->with('success' , 'Add successfully');
     }
@@ -91,7 +91,13 @@ class CategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
-         $category->update($request->all());
+        $old_file = $category->image; // if this category has file or image will return the path for this file
+         $data = $request->except('image');
+         $data['image'] = $this->uploadFile($request);
+         $category->update($data);
+        if($old_file && isset($data['image'])){
+            Storage::disk('public')->delete($old_file);
+        }
         return redirect()->route('dashboard.categories.index')
             ->with('success' , 'updated successfully');
 
@@ -105,14 +111,35 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        /*
+
+      //  Category::destroy($id);
+
+
         $category = Category::findOrFail($id);
         $category->delete();
-        */
-        // previous code can be replacement with the following
-        Category::destroy($id);
+        if($category->image){
+            Storage::disk('public')->delete($category->image);
+        }
+
         return redirect()->route('dashboard.categories.index')
             ->with('success' , 'deleted successfully');
 
     }
+
+    public function uploadFile(Request $request){
+        if(!$request->file('image')) // uploadedFile Object
+             return;
+
+        $file = $request->file('image');
+        // Now to store file and return path
+        $path = $file->store('uploads/categories', [ // the file will store inside storage/app/public/uploads/categories
+                'disk' => 'public'
+                ]);
+        return $path;
+    }
+
+
+    //$request->post() just from body (post)
+    // $request->query() just from url (get)
+    // $request->get() from post or get
 }
