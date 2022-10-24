@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+
 
 class CategoriesController extends Controller
 {
@@ -42,7 +44,7 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-
+      
         $data = $request->except('image');
         $data['slug'] = Str::slug($request->post('name'));
         $data['image'] = $this->uploadFile($request);
@@ -93,7 +95,10 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $old_file = $category->image; // if this category has file or image will return the path for this file
          $data = $request->except('image');
-         $data['image'] = $this->uploadFile($request);
+         $new_image = $this->uploadFile($request);
+         if($new_image){
+            $data['image'] = $new_image;
+         }
          $category->update($data);
         if($old_file && isset($data['image'])){
             Storage::disk('public')->delete($old_file);
