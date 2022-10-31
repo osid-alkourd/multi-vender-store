@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
@@ -44,7 +45,10 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-      
+        $request->validate(Category::rules(), [
+            'required' => 'This field (:attribute) is required ' , // custom validation message
+            'name.unique' => 'This name is already exists !' ,
+        ]);
         $data = $request->except('image');
         $data['slug'] = Str::slug($request->post('name'));
         $data['image'] = $this->uploadFile($request);
@@ -90,8 +94,9 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
+        //$request->validate(Category::rules($id));
         $category = Category::findOrFail($id);
         $old_file = $category->image; // if this category has file or image will return the path for this file
          $data = $request->except('image');
