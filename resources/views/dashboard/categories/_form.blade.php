@@ -1,11 +1,5 @@
 <div class="form-group">
-    <label for="">Category Name</label>
-    <input type="text" @class(['form-control', 'is-invalid' => $errors->has('name')]) name="name" value="{{ old('name', $category->name) }}">
-    @error('name')
-        <div class="text-danger">
-            {{ $message }}
-        </div>
-    @enderror
+    <x-form.input type="text" name="name" label="Category Name" class="form-control-lg" :value="$category->name"/>
 </div>
 
 <div class="form-group">
@@ -24,38 +18,22 @@
 </div>
 
 <div class="form-group">
-    <label for="">Description</label>
-    <textarea name="description" class="form-control">{{old('description' , $category->description )}}</textarea>
-    @error('description')
-        <div class="text-danger">
-            {{ $message }}
-        </div>
-    @enderror
+    <x-form.textarea name="description" label="Description" :value="$category->description"/>
 </div>
 
 <div class="form-group">
-    <label for="">Category Image</label>
-    <input type="file" name="image" class="form-control">
+    <x-form.label id="image">Category Image</x-form.label>
+    <x-form.input type="file" name="image" id="image" accept="image/*" />
     @if ($category->image)
         <td><img src="{{ asset('storage/' . $category->image) }}" alt="" height="40"></td>
     @endif
 </div>
 
 <div class="form-group">
-    <label for="">Status</label>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="status" value="active" @checked(old('status' , $category->status  ) == 'active')>
-        <label class="form-check-label">Active</label>
+    <x-form.label id="status">Status</x-form.label>
+    <div>
+        <x-form.radio name="status" id="status" :checked="$category->status" :options="['active' => 'Active', 'archived' => 'Archived']" />
     </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="status" value="archived" @checked(old('status' ,$category->status ) == 'archived')>
-        <label class="form-check-label">Archived</label>
-    </div>
-    @error('status')
-        <div class="text-danger">
-            {{ $message }}
-        </div>
-    @enderror
 </div>
 
 <button type="submit" class="form-group btn btn-primary">{{ $button_label ?? 'save' }}</button>

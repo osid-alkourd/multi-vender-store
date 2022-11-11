@@ -14,11 +14,7 @@
     </div>
     <!-- /.mb-5 -->
 
-    @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{session('success')}}
-        </div>
-    @endif
+    <x-alert type="success"/>
     <table class="table">
         <thead>
         <tr>
