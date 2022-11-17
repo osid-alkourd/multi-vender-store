@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('header' , 'categories')
+@section('header', 'categories')
 
 @section('breadcrum')
     @parent
@@ -9,14 +9,15 @@
 
 @section('content')
     <div class="mb-5">
-        <a href="{{route('dashboard.categories.create')}}" class="btn btn-sm btn-outline-primary">Create</a>
-        <!-- /.btn btn-sm btn-outline-primary -->
+        <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
+        <a href="{{ route('dashboard.categories.trash') }}" class="btn btn-sm btn-outline-dark">Trash</a>
     </div>
-    <!-- /.mb-5 -->
-    <x-alert type="success"/>
+
+
+    <x-alert type="success" />
 
     <form action="{{ URL::current() }}" method="GET" class="d-flex justify-content-between mb-4">
-        <x-form.input name="name" placeholder="Name" class="mx-2" :value="request('name')"/>
+        <x-form.input name="name" placeholder="Name" class="mx-2" :value="request('name')" />
         <select name="status" id="" class="form-control mx-2">
             <option value="">All</option>
             <option value="active" @selected(request('status') == 'active')>Active</option>
@@ -26,47 +27,48 @@
     </form>
     <table class="table">
         <thead>
-        <tr>
-            <th></th>
-            <th>Category id</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Parent</th>
-            <th>Created At</th>
-            <th>operation</th>
-        </tr>
+            <tr>
+                <th></th>
+                <th>Category id</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Parent</th>
+                <th>Created At</th>
+                <th>operation</th>
+            </tr>
         </thead>
         <tbody>
-        @forelse($categories as $category)
-            <tr>
-                <td><img src="{{asset('storage/'.$category->image)}}" alt="" height="40" ></td>
-                <td>{{$category->id}}</td>
-                <td>{{$category->name}}</td>
-                <td>{{ $category->status }}</td>
-                <td>{{$category->parent_name}}</td>
-                <td>{{$category->created_at}}</td>
-                <td>
-                    <a href="{{route('dashboard.categories.edit' , [$category->id])}}" class="btn btn-sm btn-outline-success">edit</a>
-                    <!-- /.btn btn-sm btn-outline-success -->
-                </td>
-                <td>
-                    <form action="{{route('dashboard.categories.destroy' , [$category->id])}}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button type="submit" class="btn btn-sm btn-outline-danger">delete</button>
-                        <!-- /.btn btn-sm btn-outline-danger -->
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="7">No Categories Defined</td>
-            </tr>
-        @endforelse
+            @forelse($categories as $category)
+                <tr>
+                    <td><img src="{{ asset('storage/' . $category->image) }}" alt="" height="40"></td>
+                    <td>{{ $category->id }}</td>
+                    <td>{{ $category->name }}</td>
+                    <td>{{ $category->status }}</td>
+                    <td>{{ $category->parent_name }}</td>
+                    <td>{{ $category->created_at }}</td>
+                    <td>
+                        <a href="{{ route('dashboard.categories.edit', [$category->id]) }}"
+                            class="btn btn-sm btn-outline-success">edit</a>
+                        <!-- /.btn btn-sm btn-outline-success -->
+                    </td>
+                    <td>
+                        <form action="{{ route('dashboard.categories.destroy', [$category->id]) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-sm btn-outline-danger">delete</button>
+                            <!-- /.btn btn-sm btn-outline-danger -->
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7">No Categories Defined</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     <!-- /.table -->
-      {{ $categories->withQueryString()->links() }}
+    {{ $categories->withQueryString()->links() }}
     <!-- /.row -->
 @stop
 
@@ -84,5 +86,4 @@
 --}}
 
 @push('scripts')
-
 @endpush

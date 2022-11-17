@@ -28,4 +28,12 @@ return [
         'title' => 'Orders',
      //   'active' => 'dashboard.orders.*',
     ],
+
+    [
+      'icon' => 'fas fa-tags nav-icon',
+      'route' => 'dashboard.categories.trash',
+      'title' => 'Teash Categories',
+      'badge' => 'New',
+    //  'active' => 'dashboard.categories.*',
+  ],
 ];
