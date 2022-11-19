@@ -1,7 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\DashboardController;
+
 
 
 Route::group([
@@ -27,5 +29,7 @@ Route::group([
         ->name('categories.force-delete');
     Route::resource('/categories' , CategoriesController::class);
     // name for route resources for index will be dashboard.cetegories.index
+    Route::resource('/products' , ProductsController::class);
+
 });
 

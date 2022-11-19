@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('store', function (Blueprint $table) {
-            // $table->bigInteger('id')->unsigned()->autoIncrement()->primary();
+        Schema::create('stores', function (Blueprint $table) {
+            // id BIGINT UNSIGNED AUTO INCREMENT PRIMARY
             $table->id();
             $table->string('name'); // VARCHAR(255)
             $table->string('slug')->unique();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store');
+        Schema::dropIfExists('stores');
     }
 };
