@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -17,7 +18,11 @@ class ProductsController extends Controller
     public function index()
     {
        
-        $products = Product::paginate();
+       // $products = Product::paginate();
+         $products = DB::table('products')
+                    ->join('categories' , 'categories.id' , '=' , 'products.category_id')
+                    ->select('products.*' , 'categories.name as category_name')
+                    ->paginate();
         return view('dashboard.products.index' , compact('products'));
     }
 
@@ -28,7 +33,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
+        // the products are created with seeder and factory 
     }
 
     /**

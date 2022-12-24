@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -25,11 +26,13 @@ class CategoriesController extends Controller
         // from categories  as child
         // LEFT JOIN categoires as parent child.parent_id = parent.id
         $categories = Category::leftJoin('categories as parents', 'categories.parent_id', '=', 'parents.id')
-                ->select([
-                    'categories.*',
-                    'parents.name as parent_name'
-                ])
-               ->filter($request->query())->paginate(3);
+                              ->select([
+                                    'categories.*',
+                                    'parents.name as parent_name'
+                                ])
+                              ->selectRaw('(SELECT COUNT(*) FROM products WHERE products.category_id = categories.id) as products_count')
+                              //->groupBy('categories.id')
+                              ->filter($request->query())->paginate(3);
         return view('dashboard.categories.index' , compact('categories'));
     }
 
@@ -73,9 +76,13 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+      $category_products = Product::where('category_id' , '=' , $category->id)
+                         ->leftJoin('stores' , 'products.store_id' , '=' , 'stores.id')
+                         ->select('products.*' , 'stores.name as store_name')
+                         ->get();
+      return view('dashboard.categories.show' , compact('category_products'));
     }
 
     /**

@@ -16,4 +16,8 @@ class Store extends Model
     protected $primaryKey = 'id' ;
     public $incrementing = true; // autoincrement
     public $timestamps = true; //  true: created_at and updated_at field are exist
+
+    public function products(){
+        return $this->hasMany(Product::class , 'store_id' , 'id');
+    }
 }

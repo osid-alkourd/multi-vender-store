@@ -32,6 +32,7 @@
                 <th>Category id</th>
                 <th>Name</th>
                 <th>Status</th>
+                <th>Products count</th>
                 <th>Parent</th>
                 <th>Created At</th>
                 <th>operation</th>
@@ -44,6 +45,7 @@
                     <td>{{ $category->id }}</td>
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->status }}</td>
+                    <td>{{ $category->products_count }}</td>
                     <td>{{ $category->parent_name }}</td>
                     <td>{{ $category->created_at }}</td>
                     <td>
