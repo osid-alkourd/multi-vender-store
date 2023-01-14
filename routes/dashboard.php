@@ -3,8 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\DashboardController;
-
-
+use App\Http\Controllers\Dashboard\ProfileController;
 
 Route::group([
      'middleware' => ['auth'] ,
@@ -13,9 +12,10 @@ Route::group([
     // 'namespace' => 'App\Http\Controller\Dashboard' ,
 ] ,function(){
     Route::get('/' , [DashboardController::class , 'index'])
-        ->middleware(['auth'])
         ->name('dashboard');
-
+ 
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');     
 
      // Route::get('/categories/{category}', [CategoriesController::class, 'show'])
     //     ->name('categories.show')
