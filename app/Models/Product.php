@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -27,7 +28,11 @@ class Product extends Model
     //           $builder->where('store_id' , '=' , $user->store_id);     
     //   });
     }
-
+    
+    public function scopeActive(Builder $builder)
+    {
+        $builder->where('status', '=', 'active');
+    }
 
     public function store(){
         return $this->belongsTo(Store::class , 'store_id' , 'id');
@@ -47,5 +52,24 @@ class Product extends Model
             'id',           // PK current model
             'id'            // PK related model
         );
+    }
+
+    // Accesser , will invoke like this $product->image_url
+    public function getImageUrlAttribute(){
+        if(!$this->image){
+            return 'https://www.incathlab.com/images/products/default_product.png';
+        }
+        if(Str::startsWith($this->image ,['http://' , 'https://'])){
+            return $this->image;
+        }
+        return asset('storage/'. $this->image);
+
+    }
+
+    public function getSalePercentAttribute(){
+        if(!$this->compare_price){
+           return 0;
+        }
+        return round(100 - ($this->price / $this->compare_price * 100));
     }
 }

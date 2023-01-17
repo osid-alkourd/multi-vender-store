@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\ProductsController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +16,15 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class , 'index'])->name('home');
+
+Route::get('/products', [ProductsController::class, 'index'])
+    ->name('products.index');
+
+Route::get('/products/{product:slug}', [ProductsController::class, 'show']) // will use the slug insted of id
+    ->name('products.show');
+
+
 /*
 Route::get('/dashboard', function () {
     return view('dashboard');
