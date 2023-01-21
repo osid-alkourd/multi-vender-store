@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController;
 
@@ -23,6 +24,8 @@ Route::get('/products', [ProductsController::class, 'index'])
 
 Route::get('/products/{product:slug}', [ProductsController::class, 'show']) // will use the slug insted of id
     ->name('products.show');
+
+Route::resource('cart', CartController::class);
 
 
 /*
