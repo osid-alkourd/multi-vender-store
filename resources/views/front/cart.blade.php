@@ -123,6 +123,12 @@
         </div>
     </div>
     <!--/ End Shopping Cart -->
-
-
+ @push('scripts')
+<script>
+    const csrf_token = "{{ csrf_token() }}";
+</script>
+<script src="{{ asset('js/jquery.min.js') }}"></script>
+<script src="{{ asset('js/cart.js') }}"></script>
+@endpush
 </x-front-layout>
+
