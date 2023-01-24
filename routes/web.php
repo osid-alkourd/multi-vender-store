@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController;
-
+use App\Http\Controllers\Front\CheckoutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
