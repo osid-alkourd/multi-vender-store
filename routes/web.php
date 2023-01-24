@@ -27,6 +27,8 @@ Route::get('/products/{product:slug}', [ProductsController::class, 'show']) // w
 
 Route::resource('cart', CartController::class);
 
+Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
+Route::post('checkout', [CheckoutController::class, 'store']);
 
 /*
 Route::get('/dashboard', function () {
