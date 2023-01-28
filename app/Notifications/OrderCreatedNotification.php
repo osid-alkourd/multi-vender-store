@@ -32,7 +32,7 @@ class OrderCreatedNotification extends Notification
     //what is the channels that notification will passed to them
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail' , 'database'];
     }
 
     /**
@@ -52,6 +52,16 @@ class OrderCreatedNotification extends Notification
                     ->line("A new order (#{$this->order->number}) created by {$addr->name} from {$addr->country_name}.")
                     ->action('View Order', url('/dashboard'))
                     ->line('Thank you for using our application!');
+    }
+
+    public function toDatabase($notifiable){
+        $addr = $this->order->billingAddress;
+        return [
+            'body' => "A new order (#{$this->order->number}) created by {$addr->name} from {$addr->country_name}.",
+            'icon' => 'fas fa-file',
+            'url' => url('/dashboard'),
+            'order_id' => $this->order->id,
+        ];
     }
 
     /**

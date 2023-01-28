@@ -8,7 +8,7 @@ use App\Http\Controllers\Dashboard\ProfileController;
 Route::group([
      'middleware' => ['auth' ,'auth.type:admin,super-admin'] ,
      'as' => 'dashboard.' ,
-    'prefix' => 'dashboard' ,
+     'prefix' => 'dashboard' ,
     // 'namespace' => 'App\Http\Controller\Dashboard' ,
 ] ,function(){
     Route::get('/' , [DashboardController::class , 'index'])
