@@ -38,5 +38,5 @@ Route::get('/dashboard', function () {
 
 
 
-require __DIR__.'/auth.php';
+//require __DIR__.'/auth.php';  // comment this because i will using Fortify insted of breeze
 require __DIR__.'/dashboard.php';
