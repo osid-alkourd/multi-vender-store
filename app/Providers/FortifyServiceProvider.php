@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
-
+use Illuminate\Support\Facades\Config;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -19,7 +21,29 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $request = request();
+        if ($request->is('admin/*')) {
+            Config::set('fortify.guard', 'admin');
+            Config::set('fortify.passwords', 'admins');
+            Config::set('fortify.prefix', 'admin');
+            //Config::set('fortify.home', 'admin/dashboard'); // this is for redirect 
+        }
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+            public function toResponse($request) {
+                if ($request->user('admin')) {
+                    return redirect()->intended('admin/dashboard');
+                }
+
+                return redirect()->intended('/');
+            }
+        });
+
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
+            public function toResponse($request) {
+                return redirect('/');
+            }
+        });
+
     }
 
     /**
@@ -42,10 +66,19 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        Fortify::viewPrefix('auth.');
-        //   Fortify::loginView('auth.login');
-        //   Fortify::registerView(function(){
-        //    return view('auth.register');
-        //   });
+        if(Config::get('fortify.guard') == 'admin'){
+            Fortify::viewPrefix('auth.');
+        } else {
+            Fortify::viewPrefix('front.auth.');
+        }
+       // Fortify::loginView(function() {
+        //     if (Config::get('fortify.guard') == 'web') {
+        //         return view ('front.auth.login');
+        //     }
+        //     return view('auth.login');
+        // });
+        // Fortify::registerView(function() {
+        //     return view('auth.register');
+        // });
     }
 }
