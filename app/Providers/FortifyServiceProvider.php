@@ -14,6 +14,7 @@ use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\Config;
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Contracts\LogoutResponse;
+use App\Actions\Fortify\AuthenticatedUser;
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -67,6 +68,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         if(Config::get('fortify.guard') == 'admin'){
+            Fortify::authenticateUsing([new AuthenticatedUser, 'authenticate']);
             Fortify::viewPrefix('auth.');
         } else {
             Fortify::viewPrefix('front.auth.');
