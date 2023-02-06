@@ -6,6 +6,7 @@ use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController;
 use App\Http\Controllers\Front\CheckoutController;
+use App\Http\Controllers\Front\Auth\TwoFactorAuthenticationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +30,10 @@ Route::resource('cart', CartController::class);
 
 Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
 Route::post('checkout', [CheckoutController::class, 'store']);
+
+Route::get('auth/user/2fa' , [TwoFactorAuthenticationController::class , 'index'])
+   ->middleware('auth')
+   ->name('front.2fa');
 
 /*
 Route::get('/dashboard', function () {
