@@ -16,17 +16,28 @@ class Product extends Model
     protected $fillable = [
         'name', 'slug', 'description', 'image', 'category_id', 'store_id',
         'price', 'compare_price', 'status',
-    ];    
+    ]; 
+    
+    protected $hidden = [
+        'image' , 
+        'created_at' ,  'updated_at' , 'deleted_at'
+    ];
+    
+    protected $appends = [
+       'image_url' , 
+    ];
     protected static function booted(){
 
         static::addGlobalScope('store' , new StoreScope());
-
 
     //  static::addGlobalScope('store' , function(Builder $builder){
     //     $user = Auth::user();
     //     if($user->store_id)
     //           $builder->where('store_id' , '=' , $user->store_id);     
     //   });
+      static::creating(function(Product $product){
+        $product->slug = Str::slug($product->name);
+      });
     }
     
     public function scopeActive(Builder $builder)
@@ -71,5 +82,36 @@ class Product extends Model
            return 0;
         }
         return round(100 - ($this->price / $this->compare_price * 100));
+    }
+
+    public function scopeFilter(Builder $builder , $filters){
+           $options = array_merge([
+             'store_id' => null , 
+             'category_id' => null , 
+             'tag_id' => null  ,
+             'status' => 'active' , 
+           ], $filters);
+
+        //    $builder->when($options['status'] , function($query , $status){
+        //        $query->where('status' , $status);
+        //    });
+
+           $builder->when($options['store_id'] , function($builder , $store_id){
+               $builder->where('store_id' , $store_id);
+           });
+
+           $builder->when($options['category_id'] , function($builder , $category_id){
+               $builder->where('category_id' , $category_id);
+           });
+
+           $builder->when($options['tag_id'] , function($builder , $tag_id){
+              $builder->whereExist(function($query) use($tag_id) {
+                  $query->select(1)
+                        ->from('product_tag')
+                        ->whereRaw('product_id = products.id')
+                        ->where('tag_id' , $tag_id);
+              });
+           });
+
     }
 }

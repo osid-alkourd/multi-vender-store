@@ -76,6 +76,7 @@ return [
       DEFAULT CURRENCY
     */ 
     'currency' => 'USD' ,
+    'api_token' => env('API_TOKEN') , 
 
     /*
     |--------------------------------------------------------------------------
